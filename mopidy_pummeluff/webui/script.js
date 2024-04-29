@@ -44,7 +44,7 @@ const requestApi = (endpoint, data) => {
 }
 
 /**
- * Refresh the registry.
+ * Refresh the action classes.
  */
 
 const refreshActionClasses = () => {
@@ -113,7 +113,7 @@ const submitForm = event => {
         document.getElementById('uid').value          = ''
         document.getElementById('alias').value        = ''
         document.getElementById('parameter').value    = ''
-        document.getElementById('action').selectIndex = 0
+        document.getElementById('action').selectedIndex = 0
 
         refreshRegistry()
     })
@@ -124,12 +124,32 @@ const submitForm = event => {
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    refreshActionClasses()
-    refreshRegistry()
+    refreshActionClasses();
+    refreshRegistry();
 
-    const readTagInterval = 1000
-    readTag()
-    setInterval(readTag, readTagInterval)
+    const readTagInterval = 1000;
+    readTag();
+    setInterval(readTag, readTagInterval);
 
-    document.querySelector('form').addEventListener('submit', submitForm)
-})
+    document.querySelector('form').addEventListener('submit', submitForm);
+
+    // Add event listener to the tbody for click events
+    document.querySelector('#tags tbody').addEventListener('click', (event) => {
+        // Check if the clicked element or its parent is a tr
+        const clickedRow = event.target.closest('tr');
+        if (clickedRow) {
+            // Extract data from the clicked row
+            const cells = clickedRow.querySelectorAll('td');
+            const uid = cells[1].textContent;
+            const alias = cells[0].textContent;
+            const action = cells[2].textContent;
+            const parameter = cells[3].textContent;
+
+            // Populate form fields with the extracted data
+            document.getElementById('uid').value = uid;
+            document.getElementById('alias').value = alias;
+            document.getElementById('action').value = action;
+            document.getElementById('parameter').value = parameter;
+        }
+    });
+});
